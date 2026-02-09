@@ -157,7 +157,13 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">项目位置</label>
-                <p class="text-sm text-slate-500">D:\分镜项目\[项目名称]</p>
+                <div class="flex gap-2">
+                    <input id="new-project-folder" type="text" class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="选择保存文件夹">
+                    <button id="browse-folder-btn" class="px-3 py-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-sm font-medium transition-colors">
+                        浏览...
+                    </button>
+                </div>
+                <p id="project-path-preview" class="text-xs text-slate-500 mt-1"></p>
             </div>
         </div>
         <div class="p-4 border-t border-border-light bg-slate-50 flex gap-2">
@@ -179,6 +185,15 @@
             <button id="close-open-project-modal" class="text-slate-400 hover:text-slate-600">
                 <span class="material-symbols-outlined">close</span>
             </button>
+        </div>
+        <div class="p-4 border-b border-border-light bg-slate-50">
+            <div class="flex gap-2 items-center">
+                <span class="text-sm text-slate-600">项目文件夹:</span>
+                <input id="projects-folder-input" type="text" class="flex-1 border border-slate-200 rounded px-2 py-1 text-sm" readonly>
+                <button id="browse-projects-folder-btn" class="px-3 py-1 border border-slate-200 hover:bg-slate-50 rounded text-sm">
+                    浏览...
+                </button>
+            </div>
         </div>
         <div class="p-4 overflow-y-auto custom-scrollbar flex-1">
             <div id="projects-list" class="space-y-2">
@@ -245,7 +260,12 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">API Key</label>
-                <input id="api-key" type="password" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="sk-...">
+                <div class="relative">
+                    <input id="api-key" type="password" class="w-full border border-slate-200 rounded-lg px-3 py-2 pr-10 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="sk-...">
+                    <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                        <span id="api-key-toggle-icon" class="material-symbols-outlined text-[20px]">visibility_off</span>
+                    </button>
+                </div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">模型 (可选)</label>

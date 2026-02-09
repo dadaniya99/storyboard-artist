@@ -5,6 +5,15 @@ use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 use serde_json::json;
 
+/// 打开文件夹选择对话框
+#[tauri::command]
+pub fn select_folder() -> Result<Option<String>, String> {
+    use rfd::FileDialog;
+
+    let folder: Option<std::path::PathBuf> = FileDialog::new().pick_folder();
+    Ok(folder.map(|p| p.to_string_lossy().to_string()))
+}
+
 /// 检查并获取全局配置
 #[tauri::command]
 pub fn get_global_config() -> Result<Option<serde_json::Value>, String> {
@@ -99,6 +108,14 @@ pub fn create_project(folder_path: String, project_name: String) -> Result<Strin
     Ok(project_path.to_string_lossy().to_string())
 }
 
+/// 检查文件夹是否是有效的分镜师项目
+#[tauri::command]
+pub fn is_valid_project(folder_path: String) -> bool {
+    let project_path = PathBuf::from(&folder_path);
+    let db_path = project_path.join(".storyboard").join("project.db");
+    db_path.exists()
+}
+
 /// 打开项目（验证并加载项目信息）
 #[tauri::command]
 pub fn open_project(folder_path: String) -> Result<ProjectMeta, String> {
@@ -138,12 +155,15 @@ pub fn open_project(folder_path: String) -> Result<ProjectMeta, String> {
         |row| row.get(0),
     ).unwrap_or(0);
 
-    // 统计对话数量
-    let chat_count: i64 = db.conn().query_row(
+    // 统计对话数量（旧项目可能没有此表，需要处理错误）
+    let chat_count: i64 = match db.conn().query_row(
         "SELECT COUNT(*) FROM chat_history",
         [],
         |row| row.get(0),
-    ).unwrap_or(0);
+    ) {
+        Ok(count) => count,
+        Err(_) => 0, // 表不存在或其他错误，默认为0
+    };
 
     Ok(ProjectMeta {
         name,
@@ -158,7 +178,9 @@ pub fn open_project(folder_path: String) -> Result<ProjectMeta, String> {
 /// 列出指定目录下的所有项目
 #[tauri::command]
 pub fn list_projects(folder_path: String) -> Result<Vec<ProjectMeta>, String> {
+    eprintln!("list_projects called with path: {:?}", folder_path);
     let base_path = PathBuf::from(&folder_path);
+    eprintln!("Resolved base_path: {:?}, exists: {}", base_path, base_path.exists());
 
     if !base_path.exists() {
         return Ok(Vec::new());
@@ -172,19 +194,30 @@ pub fn list_projects(folder_path: String) -> Result<Vec<ProjectMeta>, String> {
     for entry in entries {
         let entry = entry.map_err(|e| format!("读取目录项失败: {}", e))?;
         let path = entry.path();
+        eprintln!("Checking entry: {:?}", path);
 
         // 只处理目录
         if path.is_dir() {
             let db_path = path.join(".storyboard").join("project.db");
+            eprintln!("  DB path: {:?}, exists: {}", db_path, db_path.exists());
             if db_path.exists() {
                 // 这是一个有效的项目
                 match open_project(path.to_string_lossy().to_string()) {
-                    Ok(meta) => projects.push(meta),
-                    Err(_) => continue, // 跳过无效项目
+                    Ok(meta) => {
+                        eprintln!("  Successfully loaded project: {}", meta.name);
+                        projects.push(meta);
+                    }
+                    Err(e) => {
+                        // 打印错误信息以便调试，但仍然跳过该项目
+                        eprintln!("  跳过项目 {:?}: {}", path, e);
+                        continue;
+                    }
                 }
             }
         }
     }
+
+    eprintln!("Found {} projects", projects.len());
 
     // 按修改时间降序排序（最近修改的在前）
     projects.sort_by(|a, b| b.modified_at.cmp(&a.modified_at));

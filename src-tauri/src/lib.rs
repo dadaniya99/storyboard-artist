@@ -21,6 +21,7 @@ pub fn run() {
       get_global_config,
       save_global_config,
       create_project,
+      is_valid_project,
       open_project,
       list_projects,
       check_project_name_exists,
@@ -33,6 +34,7 @@ pub fn run() {
       save_chat_message,
       get_chat_history,
       call_ai_api,
+      select_folder,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

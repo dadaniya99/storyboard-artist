@@ -12,7 +12,8 @@ const state = {
     props: [],
     apis: [],  // API 配置列表
     editingApiIndex: null,  // 当前编辑的 API 索引，null 表示新增
-    chatHistory: []  // 聊天历史记录
+    chatHistory: [],  // 聊天历史记录
+    lastProjectsFolder: ''  // 记住上次使用的项目文件夹
 };
 
 // DOM 元素
@@ -114,10 +115,55 @@ function setupEventListeners() {
         }
     });
 
+    // 文件夹浏览按钮
+    document.getElementById('browse-folder-btn').addEventListener('click', async () => {
+        try {
+            const folder = await invoke('select_folder');
+            if (folder) {
+                document.getElementById('new-project-folder').value = folder;
+                updatePathPreview();
+            }
+        } catch (e) {
+            console.error('选择文件夹失败:', e);
+        }
+    });
+
+    // 输入变化时更新路径预览
+    document.getElementById('new-project-name').addEventListener('input', updatePathPreview);
+    document.getElementById('new-project-folder').addEventListener('input', updatePathPreview);
+
     // 打开项目弹窗
     document.getElementById('open-project-btn').addEventListener('click', handleOpenProject);
     document.getElementById('close-open-project-modal').addEventListener('click', () => {
         document.getElementById('open-project-modal').classList.add('hidden');
+    });
+
+    // 浏览项目文件夹按钮
+    document.getElementById('browse-projects-folder-btn').addEventListener('click', async () => {
+        try {
+            const folder = await invoke('select_folder');
+            if (folder) {
+                // 先检查选中的文件夹本身是否是一个项目
+                const isProject = await invoke('is_valid_project', { folderPath: folder });
+                if (isProject) {
+                    // 直接打开这个项目
+                    const project = await invoke('open_project', { folderPath: folder });
+                    // 关闭弹窗
+                    document.getElementById('open-project-modal').classList.add('hidden');
+                    // 打开项目
+                    state.currentProject = project.path;
+                    projectTitle.textContent = project.name;
+                    await loadProjectData();
+                    showMainScreen();
+                } else {
+                    // 不是项目，显示该文件夹下的项目列表
+                    document.getElementById('projects-folder-input').value = folder;
+                    await loadProjectsList(folder);
+                }
+            }
+        } catch (e) {
+            console.error('选择文件夹失败:', e);
+        }
     });
 
     // 项目标题双击重命名
@@ -166,21 +212,41 @@ function setupEventListeners() {
 async function handleNewProject() {
     const modal = document.getElementById('new-project-modal');
     const nameInput = document.getElementById('new-project-name');
+    const folderInput = document.getElementById('new-project-folder');
     const errorText = document.getElementById('project-name-error');
 
     nameInput.value = '';
+    folderInput.value = '';
     errorText.classList.add('hidden');
+    updatePathPreview();
     modal.classList.remove('hidden');
     nameInput.focus();
+}
+
+// 更新路径预览
+function updatePathPreview() {
+    const name = document.getElementById('new-project-name').value.trim();
+    const folder = document.getElementById('new-project-folder').value.trim();
+    const preview = document.getElementById('project-path-preview');
+
+    if (folder && name) {
+        preview.textContent = `${folder}\\${name}`;
+    } else if (folder) {
+        preview.textContent = `${folder}\\[项目名称]`;
+    } else {
+        preview.textContent = '请选择保存文件夹';
+    }
 }
 
 // 确认新建项目
 async function confirmNewProject() {
     const nameInput = document.getElementById('new-project-name');
+    const folderInput = document.getElementById('new-project-folder');
     const errorText = document.getElementById('project-name-error');
     const modal = document.getElementById('new-project-modal');
 
     const name = nameInput.value.trim();
+    const folder = folderInput.value.trim();
 
     if (!name) {
         errorText.textContent = '请输入项目名称';
@@ -188,10 +254,16 @@ async function confirmNewProject() {
         return;
     }
 
+    if (!folder) {
+        errorText.textContent = '请选择项目保存位置';
+        errorText.classList.remove('hidden');
+        return;
+    }
+
     // 检查名称是否已存在
     try {
         const exists = await invoke('check_project_name_exists', {
-            folderPath: 'D:\\分镜项目',
+            folderPath: folder,
             projectName: name,
             excludePath: null
         });
@@ -207,10 +279,11 @@ async function confirmNewProject() {
 
     try {
         const projectPath = await invoke('create_project', {
-            folderPath: 'D:\\分镜项目',
+            folderPath: folder,
             projectName: name
         });
         state.currentProject = projectPath;
+        state.lastProjectsFolder = folder;  // 记住这个项目文件夹
         projectTitle.textContent = name;  // 设置项目标题
         await loadProjectData();  // 加载项目数据
         modal.classList.add('hidden');
@@ -224,18 +297,43 @@ async function confirmNewProject() {
 // 打开项目
 async function handleOpenProject() {
     const modal = document.getElementById('open-project-modal');
+    const folderInput = document.getElementById('projects-folder-input');
+
+    modal.classList.remove('hidden');
+
+    // 使用上次使用的文件夹，或默认为空
+    const lastFolder = state.lastProjectsFolder || '';
+    folderInput.value = lastFolder;
+
+    if (lastFolder) {
+        await loadProjectsList(lastFolder);
+    } else {
+        // 如果没有记住的文件夹，提示用户选择
+        document.getElementById('projects-list').innerHTML = '';
+        document.getElementById('no-projects-message').textContent = '请点击"浏览..."选择项目文件夹';
+        document.getElementById('no-projects-message').classList.remove('hidden');
+    }
+}
+
+// 加载项目列表
+async function loadProjectsList(folderPath) {
     const listEl = document.getElementById('projects-list');
     const noProjectsMsg = document.getElementById('no-projects-message');
 
     listEl.innerHTML = '';
     noProjectsMsg.classList.add('hidden');
 
+    // 记住这次使用的文件夹
+    state.lastProjectsFolder = folderPath;
+    document.getElementById('projects-folder-input').value = folderPath;
+
     try {
         const projects = await invoke('list_projects', {
-            folderPath: 'D:\\分镜项目'
+            folderPath: folderPath
         });
 
         if (projects.length === 0) {
+            noProjectsMsg.textContent = '该文件夹中没有项目';
             noProjectsMsg.classList.remove('hidden');
         } else {
             projects.forEach(project => {
@@ -256,10 +354,9 @@ async function handleOpenProject() {
                 listEl.appendChild(item);
             });
         }
-
-        modal.classList.remove('hidden');
     } catch (error) {
-        alert('加载项目列表失败: ' + error);
+        noProjectsMsg.textContent = '加载失败: ' + error;
+        noProjectsMsg.classList.remove('hidden');
     }
 }
 
@@ -537,6 +634,22 @@ function maskApiKey(key) {
     if (!key || key.length <= 8) return '****';
     return key.substring(0, 4) + '****' + key.substring(key.length - 4);
 }
+
+// 切换 API Key 显示/隐藏
+function toggleApiKeyVisibility() {
+    const input = document.getElementById('api-key');
+    const icon = document.getElementById('api-key-toggle-icon');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility';
+    } else {
+        input.type = 'password';
+        icon.textContent = 'visibility_off';
+    }
+}
+// 暴露到全局作用域供 HTML onclick 使用
+window.toggleApiKeyVisibility = toggleApiKeyVisibility;
 
 // 显示 API 编辑弹窗
 function showApiEditModal(index) {
