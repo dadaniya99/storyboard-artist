@@ -1,0 +1,28 @@
+# Node
+node_modules/
+package-lock.json
+
+# Tauri build
+src-tauri/target/
+src-tauri/Cargo.lock
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+.claude/
+chatfiles/
+
+# Temp files
+nul

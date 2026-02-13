@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>分镜桌面应用-场景资产表</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "border-light": "#e2e8f0",
+                        "bg-main": "#f8fafc",
+                        "bg-sidebar": "#ffffff",
+                        "accent-blue": "#eff6ff"
+                    },
+                    fontFamily: {
+                        "display": ["'Noto Sans SC'", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+            border: 2px solid #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .layout-icon-box {
+            @apply border border-slate-400 rounded-[2px] w-5 h-4 flex gap-[1px] p-[1px];
+        }
+        .layout-icon-segment {
+            @apply bg-slate-400 opacity-40;
+        }
+        .active-layout .layout-icon-segment {
+            @apply opacity-100;
+        }
+        .active-layout .layout-icon-box {
+            @apply border-primary text-primary;
+        }
+        .active-layout .layout-icon-segment {
+            @apply bg-primary;
+        }.sticky-col-1 { @apply sticky left-0 z-20 bg-white; }
+        .sticky-col-2 { @apply sticky left-[64px] z-20 bg-white; }
+        .sticky-col-3 { @apply sticky left-[144px] z-20 bg-white shadow-[4px_0_8px_-4px_rgba(0,0,0,0.1)]; }
+        thead th.sticky-col-1, thead th.sticky-col-2, thead th.sticky-col-3 {
+            @apply bg-slate-50 z-30;
+        }
+        tr.hover-row:hover td.sticky-col-1,
+        tr.hover-row:hover td.sticky-col-2,
+        tr.hover-row:hover td.sticky-col-3 {
+            @apply bg-slate-50;
+        }th, td {
+            @apply border-b border-r border-border-light;
+        }
+        th:last-child, td:last-child {
+            @apply border-r-0;
+        }
+    </style>
+</head>
+<body class="bg-bg-main font-display text-slate-700 h-screen overflow-hidden flex flex-col">
+<header class="h-10 border-b border-border-light flex items-center justify-between px-4 bg-white shrink-0 z-50">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="size-5 text-primary">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z"></path>
+</svg>
+</div>
+<div class="flex gap-1">
+<button class="text-xs font-medium hover:bg-slate-100 px-2 py-1 rounded">文件</button>
+<button class="text-xs font-medium hover:bg-slate-100 px-2 py-1 rounded">配置</button>
+</div>
+</div>
+<h1 class="text-sm font-semibold tracking-tight text-slate-500">我的第一个分镜项目</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 border-r border-border-light pr-4">
+<button class="p-2 hover:bg-slate-100 rounded group transition-colors">
+<div class="layout-icon-box">
+<div class="layout-icon-segment w-[30%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[70%] h-full rounded-[1px]"></div>
+</div>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded group transition-colors active-layout">
+<div class="layout-icon-box">
+<div class="layout-icon-segment w-[20%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[55%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[25%] h-full rounded-[1px]"></div>
+</div>
+</button>
+<button class="p-1 hover:bg-slate-100 rounded ml-1">
+<span class="material-symbols-outlined text-slate-400">light_mode</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded">
+<span class="material-symbols-outlined text-slate-400">remove</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded">
+<span class="material-symbols-outlined text-slate-400">check_box_outline_blank</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-red-500 hover:text-white rounded transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<nav class="w-[60px] border-r border-border-light bg-white flex flex-col items-center py-4 gap-8 shrink-0 z-40">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">table_view</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">分镜表</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">person</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">角色</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined">movie</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-primary tracking-wide">场景</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">label</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">道具</span>
+</div>
+<div class="mt-auto flex flex-col items-center gap-1">
+<div class="p-2 text-slate-400 hover:bg-slate-100 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+</div>
+</div>
+</nav>
+<main class="flex-1 overflow-hidden flex flex-col">
+<div class="px-6 py-4 flex items-center justify-between shrink-0 bg-white">
+<div class="flex items-center gap-3">
+<h2 class="text-xl font-bold text-slate-800">场景</h2>
+<div class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] font-bold uppercase">6 场景</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    新增场景
+                </button>
+<button class="bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                    导出
+                </button>
+</div>
+</div>
+<div class="flex-1 overflow-hidden px-6 pb-6">
+<div class="border border-border-light rounded-xl bg-white shadow-sm overflow-hidden flex flex-col h-full">
+<div class="overflow-auto custom-scrollbar h-full w-full">
+<table class="w-full text-left border-separate border-spacing-0 min-w-[1800px]">
+<thead class="bg-slate-50 sticky top-0 z-30">
+<tr>
+<th class="sticky-col-1 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[80px]">ID</th>
+<th class="sticky-col-2 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[120px]">名称</th>
+<th class="sticky-col-3 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[300px]">场景描述</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词(中)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词(英)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[200px]">备注</th>
+</tr>
+</thead>
+<tbody class="text-sm text-slate-600">
+<tr class="hover-row transition-colors group bg-white">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#001</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">森林入口</td>
+<td class="sticky-col-3 px-4 py-5">角色站在茂密的森林入口，阳光穿过树叶，形成丁达尔效应。</td>
+<td class="px-4 py-5">一个身穿披风的英雄站在森林前，清晨的阳光，唯美，高清，吉卜力风格。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">A hero in a cloak standing before a forest, morning sunlight, aesthetic, 8k, Ghibli style.</td>
+<td class="px-4 py-5 text-slate-400">光影需柔和</td>
+</tr>
+<tr class="hover-row transition-colors group bg-slate-50/40">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#002</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">古老神庙</td>
+<td class="sticky-col-3 px-4 py-5">废墟中的石头神庙，布满青苔，四周被藤蔓缠绕，氛围庄严肃穆。</td>
+<td class="px-4 py-5">古老的希腊风格神庙，周围有废墟，青苔，细节丰富，电影质感。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Ancient Greek style temple, ruins surroundings, moss, detailed, cinematic lighting.</td>
+<td class="px-4 py-5 text-slate-400">增加环境雾气</td>
+</tr>
+<tr class="hover-row transition-colors group bg-white">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#003</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">科技都市</td>
+<td class="sticky-col-3 px-4 py-5">霓虹灯闪烁的未来街道，下着小雨，地面有彩色的反光倒影。</td>
+<td class="px-4 py-5">赛博朋克风格的街道，霓虹灯，雨水反射，暗调，虚幻引擎5渲染。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Cyberpunk street, neon lights, rain reflections, dark moody, UE5 render.</td>
+<td class="px-4 py-5 text-slate-400">高对比度</td>
+</tr>
+<tr class="hover-row transition-colors group bg-slate-50/40">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#004</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">秘密实验室</td>
+<td class="sticky-col-3 px-4 py-5">充满高科技设备的阴暗实验室，中央有一个巨大的能量球。</td>
+<td class="px-4 py-5">充满试管和显示器的实验室，冷色调，科幻，写实风格，8k。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Laboratory with test tubes and monitors, cool tones, sci-fi, realistic, 8k.</td>
+<td class="px-4 py-5 text-slate-400">背景流动感</td>
+</tr>
+<tr class="hover-row transition-colors group bg-white">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#005</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">山顶祭坛</td>
+<td class="sticky-col-3 px-4 py-5">白雪皑皑的山顶，中央有一个发光的祭坛，天空中有极光。</td>
+<td class="px-4 py-5">雪山顶部的神圣祭坛，天空中有绚丽极光，史诗感，概念设计。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Sacred altar on snowy peak, aurora in sky, epic, concept art.</td>
+<td class="px-4 py-5 text-slate-400">强调极光效果</td>
+</tr>
+<tr class="hover-row transition-colors group bg-slate-50/40">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">#006</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">废弃工厂</td>
+<td class="sticky-col-3 px-4 py-5">工业风格的废旧工厂内部，生锈的管道和破碎的窗户。</td>
+<td class="px-4 py-5">废弃工厂，锈迹斑斑，写实，高对比度，电影光影。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Abandoned factory, rusted metal, realistic, high contrast, cinematic light.</td>
+<td class="px-4 py-5 text-slate-400">需要阴郁色彩</td>
+</tr>
+<tr class="hover-row transition-colors group bg-white"><td class="sticky-col-1 px-4 py-5 text-slate-400">7</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">#007</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="3">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-slate-50/40"><td class="sticky-col-1 px-4 py-5 text-slate-400">8</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">#008</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="3">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-white"><td class="sticky-col-1 px-4 py-5 text-slate-400">9</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">#009</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="3">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-slate-50/40"><td class="sticky-col-1 px-4 py-5 text-slate-400">10</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">#010</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="3">更多内容向上滚动预览...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<aside class="w-[300px] border-l border-border-light bg-white flex flex-col shrink-0 z-40" id="ai-sidebar">
+<div class="p-4 border-b border-border-light flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h2 class="font-bold text-sm tracking-tight text-slate-800">AI 助手</h2>
+</div>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 custom-scrollbar">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1.5 max-w-[85%]">
+<div class="bg-slate-100 text-slate-700 p-3 rounded-2xl rounded-tl-none">
+<p class="text-xs leading-relaxed">我已经为您完成了场景资产表的详细列表布局。您可以点击每一行进行快捷编辑。需要我为您自动生成场景的生图提示词吗？</p>
+</div>
+<span class="text-[10px] text-slate-400 ml-1">AI 助手 · 14:30</span>
+</div>
+</div>
+<div class="flex gap-3 flex-row-reverse">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center shrink-0 overflow-hidden shadow-sm text-white text-[10px] font-bold">
+                    USER
+                </div>
+<div class="flex flex-col gap-1.5 items-end max-w-[85%]">
+<div class="bg-primary text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
+<p class="text-xs leading-relaxed">好的，请根据"森林入口"的场景描述，优化它的英文提示词。</p>
+</div>
+<span class="text-[10px] text-slate-400 mr-1">您 · 14:32</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-border-light bg-white">
+<div class="relative">
+<textarea class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-none h-24 placeholder:text-slate-400 custom-scrollbar" placeholder="询问 AI 助手..."></textarea>
+<button class="absolute bottom-2 right-2 p-1.5 bg-primary rounded-lg text-white shadow-md hover:bg-blue-600 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+
+</body></html>

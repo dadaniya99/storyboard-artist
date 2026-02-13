@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>删除确认弹窗设计</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1337",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221013",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Source Han Sans CN", "Microsoft YaHei", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Source Han Sans CN', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-display">
+<!-- Background Dashboard (Dimmed Overlay Context) -->
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-solid border-gray-200 dark:border-gray-800 bg-white dark:bg-zinc-900 px-10 py-3 opacity-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-zinc-900 dark:text-zinc-100">
+<div class="size-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">movie_edit</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Storyboard Manager</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-sm font-medium" href="#">Dashboard</a>
+<a class="text-sm font-medium border-b-2 border-primary" href="#">Projects</a>
+<a class="text-sm font-medium text-zinc-500" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="h-8 w-40 bg-zinc-100 dark:bg-zinc-800 rounded-lg"></div>
+<div class="size-10 rounded-full bg-zinc-200 dark:bg-zinc-700" data-alt="User profile avatar circle"></div>
+</div>
+</header>
+<!-- Main Content Area (Blurred/Dimmed) -->
+<main class="flex-1 p-8 grid grid-cols-3 gap-6 opacity-30">
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 1"></div>
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 2"></div>
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 3"></div>
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 4"></div>
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 5"></div>
+<div class="aspect-video bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700" data-alt="Storyboard thumbnail card 6"></div>
+</main>
+<!-- Backdrop Overlay -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-40 flex items-center justify-center">
+<!-- Delete Confirmation Modal -->
+<div class="w-[400px] bg-white dark:bg-zinc-900 rounded-xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden flex flex-col">
+<!-- Modal Header -->
+<div class="px-6 pt-6 pb-4 flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1">warning</span>
+</div>
+<h3 class="text-xl font-bold text-zinc-900 dark:text-white">确认删除</h3>
+</div>
+<!-- Modal Body -->
+<div class="px-6 pb-6">
+<p class="text-zinc-600 dark:text-zinc-400 mb-4 text-[15px]">确认删除以下分镜？</p>
+<!-- Selected Items List -->
+<div class="space-y-2 mb-5">
+<div class="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+<div class="h-10 w-16 bg-zinc-200 dark:bg-zinc-700 rounded-md overflow-hidden bg-cover bg-center" data-alt="Storyboard shot 8 preview" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBy6Xa5zL2S5-fa7cyrn_T3kGJFXIkaIKogTqkQh8pF_TZo106XgUKQaMOCejl5wnzMWAC92uwxxbajVDnICb_ZTdFV1Dzk28Dk00Km2aCvxe5Y7SrOVx9qtklUEgCJ26KX8t_jGCnXVbVW782p7AX_a_KTtV_c-xspBP-slJJuKVW59jsVpYYYUwIusYmbzVq5apXTqsgB-QR9pIm4IgIdrhhu81fmktBg2rmq-sDJ5sd6fRh_dWVaFMHQlbRRaNeWh2rXNq-jEYQA')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 truncate">Shot 8: Close-up of protagonist sitting up</p>
+<p class="text-xs text-zinc-500 dark:text-zinc-500">3s</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+<div class="h-10 w-16 bg-zinc-200 dark:bg-zinc-700 rounded-md overflow-hidden bg-cover bg-center" data-alt="Storyboard shot 9 preview" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmfUe3gybkT4H9tEu20X8mHWVmNwZTyXZtNXGcqJZQs2Vy8-7ym-Cm0QpQpAaC_olnjeLCyRnXDeYm2JpsnrJ9NN0qoVWocyF7cx2e2E1pPC13FdeKoKX-bUyMyxAQHP0-r4577rzp9YuKkzY2Z9dPC2_5fCSwOVkC4ftk1B6UCzrnzZuuEhmTcOiU4ynrTiRKAuFcqjSWr3K0wyp7GoqjMze3OwwiW7hEI_ojCAMcy70NGXsHBQCAoug9e9c_IFr8RBi8kqkAu6Y4')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 truncate">Shot 9: Wide shot of protagonist walking to window</p>
+<p class="text-xs text-zinc-500 dark:text-zinc-500">5s</p>
+</div>
+</div>
+</div>
+<!-- Warning Indicator -->
+<div class="flex items-center gap-2 px-1 py-1">
+<span class="material-symbols-outlined text-primary text-sm">info</span>
+<p class="text-primary font-bold text-sm">此操作不可撤销。</p>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-3">
+<button class="px-5 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 rounded-lg transition-colors">
+                        取消
+                    </button>
+<button class="px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 active:scale-95 rounded-lg transition-all shadow-md shadow-primary/20">
+                        确认删除
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>分镜桌面应用-分镜表详细列表</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "border-light": "#e2e8f0",
+                        "bg-main": "#f8fafc",
+                        "bg-sidebar": "#ffffff",
+                        "accent-blue": "#eff6ff"
+                    },
+                    fontFamily: {
+                        "display": ["'Noto Sans SC'", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+            border: 2px solid #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .layout-icon-box {
+            @apply border border-slate-400 rounded-[2px] w-5 h-4 flex gap-[1px] p-[1px];
+        }
+        .layout-icon-segment {
+            @apply bg-slate-400 opacity-40;
+        }
+        .active-layout .layout-icon-segment {
+            @apply opacity-100;
+        }
+        .active-layout .layout-icon-box {
+            @apply border-primary text-primary;
+        }
+        .active-layout .layout-icon-segment {
+            @apply bg-primary;
+        }.sticky-col-1 { @apply sticky left-0 z-20 bg-white; }
+        .sticky-col-2 { @apply sticky left-[64px] z-20 bg-white; }
+        .sticky-col-3 { @apply sticky left-[144px] z-20 bg-white shadow-[4px_0_8px_-4px_rgba(0,0,0,0.1)]; }
+        thead th.sticky-col-1, thead th.sticky-col-2, thead th.sticky-col-3 {
+            @apply bg-slate-50 z-30;
+        }
+        tr.hover-row:hover td.sticky-col-1,
+        tr.hover-row:hover td.sticky-col-2,
+        tr.hover-row:hover td.sticky-col-3 {
+            @apply bg-slate-50;
+        }th, td {
+            @apply border-b border-r border-border-light;
+        }
+        th:last-child, td:last-child {
+            @apply border-r-0;
+        }
+    </style>
+</head>
+<body class="bg-bg-main font-display text-slate-700 h-screen overflow-hidden flex flex-col">
+<header class="h-10 border-b border-border-light flex items-center justify-between px-4 bg-white shrink-0 z-50">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="size-5 text-primary">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z"></path>
+</svg>
+</div>
+<div class="flex gap-1">
+<button class="text-xs font-medium hover:bg-slate-100 px-2 py-1 rounded">文件</button>
+<button class="text-xs font-medium hover:bg-slate-100 px-2 py-1 rounded">配置</button>
+</div>
+</div>
+<h1 class="text-sm font-semibold tracking-tight text-slate-500">我的第一个分镜项目</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 border-r border-border-light pr-4">
+<button class="p-2 hover:bg-slate-100 rounded group transition-colors">
+<div class="layout-icon-box">
+<div class="layout-icon-segment w-[30%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[70%] h-full rounded-[1px]"></div>
+</div>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded group transition-colors active-layout">
+<div class="layout-icon-box">
+<div class="layout-icon-segment w-[20%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[55%] h-full rounded-[1px]"></div>
+<div class="layout-icon-segment w-[25%] h-full rounded-[1px]"></div>
+</div>
+</button>
+<button class="p-1 hover:bg-slate-100 rounded ml-1">
+<span class="material-symbols-outlined text-slate-400">light_mode</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded">
+<span class="material-symbols-outlined text-slate-400">remove</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded">
+<span class="material-symbols-outlined text-slate-400">check_box_outline_blank</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-red-500 hover:text-white rounded transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<nav class="w-[60px] border-r border-border-light bg-white flex flex-col items-center py-4 gap-8 shrink-0 z-40">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined">table_view</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-primary tracking-wide">分镜表</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">person</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">角色</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">movie</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">场景</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="p-2 text-slate-400 group-hover:bg-slate-100 rounded-lg transition-all">
+<span class="material-symbols-outlined">label</span>
+</div>
+<span class="vertical-text text-[11px] font-bold text-slate-400 tracking-wide">道具</span>
+</div>
+<div class="mt-auto flex flex-col items-center gap-1">
+<div class="p-2 text-slate-400 hover:bg-slate-100 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+</div>
+</div>
+</nav>
+<main class="flex-1 overflow-hidden flex flex-col">
+<div class="px-6 py-4 flex items-center justify-between shrink-0 bg-white">
+<div class="flex items-center gap-3">
+<h2 class="text-xl font-bold text-slate-800">分镜表</h2>
+<div class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] font-bold uppercase">4 镜头</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    新建镜头
+                </button>
+<button class="bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                    导出
+                </button>
+</div>
+</div>
+<div class="flex-1 overflow-hidden px-6 pb-6">
+<div class="border border-border-light rounded-xl bg-white shadow-sm overflow-hidden flex flex-col h-full">
+<div class="overflow-auto custom-scrollbar h-full w-full">
+<table class="w-full text-left border-separate border-spacing-0 min-w-[3600px]">
+<thead class="bg-slate-50 sticky top-0 z-30">
+<tr>
+<th class="sticky-col-1 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[64px]">序号</th>
+<th class="sticky-col-2 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[80px]">镜号</th>
+<th class="sticky-col-3 px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[120px]">镜头类型</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[100px]">景别</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[100px]">时长</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[300px]">对白/旁白</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[400px]">画面描述</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[200px]">备注</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词-首帧(中)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词-首帧(英)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词-尾帧(中)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生图提示词-尾帧(英)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生视频提示词(中)</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-[350px]">生视频提示词(英)</th>
+</tr>
+</thead>
+<tbody class="text-sm text-slate-600">
+<tr class="hover-row transition-colors group bg-white">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">1</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_001</td>
+<td class="sticky-col-3 px-4 py-5">推镜头</td>
+<td class="px-4 py-5 text-slate-500">特写</td>
+<td class="px-4 py-5">3.5s</td>
+<td class="px-4 py-5 italic text-slate-500">“快跑，不要回头！”</td>
+<td class="px-4 py-5">主角在繁忙的街道上奔跑，神情极度恐慌。</td>
+<td class="px-4 py-5 text-slate-400">-</td>
+<td class="px-4 py-5">一名惊恐的男子在霓虹闪烁的未来城市街道奔跑。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">A terrified man running in a neon-lit futuristic city street, hyper-realistic.</td>
+<td class="px-4 py-5">男子近景，背景是虚化的灯光和雨水。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Close up of the man, blurred city lights and rain in background.</td>
+<td class="px-4 py-5 text-primary">动态模糊，雨滴飞溅，强烈的镜头推力。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Motion blur, rain splashes, strong dolly zoom in effect.</td>
+</tr>
+<tr class="hover-row transition-colors group bg-slate-50/40">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">2</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_002</td>
+<td class="sticky-col-3 px-4 py-5">固定镜</td>
+<td class="px-4 py-5 text-slate-500">全景</td>
+<td class="px-4 py-5">2.0s</td>
+<td class="px-4 py-5 italic text-slate-500">（环境音：警笛声由远及近）</td>
+<td class="px-4 py-5">空荡荡的小巷，墙上的涂鸦在闪烁的警报灯下若隐若现。</td>
+<td class="px-4 py-5 text-slate-400">注意灯光节奏</td>
+<td class="px-4 py-5">阴暗潮湿的小巷，赛博朋克风格涂鸦。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Dark damp alleyway with cyberpunk graffiti, dramatic lighting.</td>
+<td class="px-4 py-5">红蓝交替的警灯照射在湿滑的地面上。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Red and blue police lights reflecting on wet ground.</td>
+<td class="px-4 py-5 text-primary">警灯闪烁频率加快，地面水纹波动。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Police light flashing faster, water ripples on the ground.</td>
+</tr>
+<tr class="hover-row transition-colors group bg-white">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">3</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_003</td>
+<td class="sticky-col-3 px-4 py-5">俯拍</td>
+<td class="px-4 py-5 text-slate-500">大远景</td>
+<td class="px-4 py-5">5.0s</td>
+<td class="px-4 py-5 italic text-slate-500">旁白：“这就是他逃跑的最后机会。”</td>
+<td class="px-4 py-5">城市俯瞰图，无数飞行器在摩天大楼间穿梭。</td>
+<td class="px-4 py-5 text-slate-400">需要大量粒子特效</td>
+<td class="px-4 py-5">赛博朋克大都市鸟瞰，极高对比度。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Bird's eye view of cyberpunk megacity, high contrast.</td>
+<td class="px-4 py-5">一架银色飞行器划过屏幕。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">A silver flying vehicle crossing the screen.</td>
+<td class="px-4 py-5 text-primary">密集的城市交通流，云层缓慢移动。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Dense city traffic flow, slow moving clouds.</td>
+</tr>
+<tr class="hover-row transition-colors group bg-slate-50/40">
+<td class="sticky-col-1 px-4 py-5 font-mono text-slate-400">4</td>
+<td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_004</td>
+<td class="sticky-col-3 px-4 py-5">环绕镜</td>
+<td class="px-4 py-5 text-slate-500">中景</td>
+<td class="px-4 py-5">4.2s</td>
+<td class="px-4 py-5 italic text-slate-500">-</td>
+<td class="px-4 py-5">反派角色站立在高塔边缘，披风随风飘动。</td>
+<td class="px-4 py-5 text-slate-400">-</td>
+<td class="px-4 py-5">站在摩天大楼顶端的神秘人，披风飞扬。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Mysterious figure on skyscraper edge, flowing cape.</td>
+<td class="px-4 py-5">摄影机环绕一周，露出反派冷峻的侧脸。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Camera orbiting, revealing a cold side profile.</td>
+<td class="px-4 py-5 text-primary">平滑的环绕运动，披风真实的物理模拟。</td>
+<td class="px-4 py-5 font-mono text-[11px] leading-relaxed">Smooth orbital camera, realistic cape physics.</td>
+</tr>
+<tr class="hover-row transition-colors group bg-white"><td class="sticky-col-1 px-4 py-5 text-slate-400">5</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_005</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-slate-50/40"><td class="sticky-col-1 px-4 py-5 text-slate-400">6</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_006</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-white"><td class="sticky-col-1 px-4 py-5 text-slate-400">7</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_007</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-slate-50/40"><td class="sticky-col-1 px-4 py-5 text-slate-400">8</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_008</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-white"><td class="sticky-col-1 px-4 py-5 text-slate-400">9</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_009</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+<tr class="hover-row transition-colors group bg-slate-50/40"><td class="sticky-col-1 px-4 py-5 text-slate-400">10</td><td class="sticky-col-2 px-4 py-5 font-bold text-primary">SC_010</td><td class="sticky-col-3 px-4 py-5">...</td><td class="px-4 py-5 italic text-slate-300" colspan="11">更多内容向上滚动预览...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<aside class="w-[300px] border-l border-border-light bg-white flex flex-col shrink-0 z-40" id="ai-sidebar">
+<div class="p-4 border-b border-border-light flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h2 class="font-bold text-sm tracking-tight text-slate-800">AI 助手</h2>
+</div>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 custom-scrollbar">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1.5 max-w-[85%]">
+<div class="bg-slate-100 text-slate-700 p-3 rounded-2xl rounded-tl-none">
+<p class="text-xs leading-relaxed">我已经为您完成了分镜表的详细列表布局。您可以点击每一行进行快捷编辑。需要我为您自动生成后续镜头的生图提示词吗？</p>
+</div>
+<span class="text-[10px] text-slate-400 ml-1">AI 助手 · 14:30</span>
+</div>
+</div>
+<div class="flex gap-3 flex-row-reverse">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center shrink-0 overflow-hidden shadow-sm text-white text-[10px] font-bold">
+                    USER
+                </div>
+<div class="flex flex-col gap-1.5 items-end max-w-[85%]">
+<div class="bg-primary text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
+<p class="text-xs leading-relaxed">好的，请根据当前的故事背景，优化第4镜头的英文提示词。</p>
+</div>
+<span class="text-[10px] text-slate-400 mr-1">您 · 14:32</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-border-light bg-white">
+<div class="relative">
+<textarea class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-none h-24 placeholder:text-slate-400 custom-scrollbar" placeholder="询问 AI 助手..."></textarea>
+<button class="absolute bottom-2 right-2 p-1.5 bg-primary rounded-lg text-white shadow-md hover:bg-blue-600 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+
+</body></html>
