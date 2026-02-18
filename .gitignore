@@ -1,0 +1,23 @@
+# Node
+node_modules/
+package-lock.json
+*.log
+
+# Tauri build
+src-tauri/target/
+src-tauri/Cargo.lock
+
+# Build output
+dist/
+*.app.exe
+
+# OS
+.DS_Store
+Thumbs.db
+*nul
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
